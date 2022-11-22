@@ -30,8 +30,6 @@ public class MovieCatalogResources {
     @RequestMapping("/{userId}")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
 
-        WebClient.Builder builder = WebClient.builder();
-
         UserRating ratings = restTemplate.getForObject("http://localhost:8080/ratingsdata/users/" + userId,
                 UserRating.class);
 
