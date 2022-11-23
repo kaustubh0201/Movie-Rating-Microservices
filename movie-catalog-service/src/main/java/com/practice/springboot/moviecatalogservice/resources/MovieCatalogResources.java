@@ -36,15 +36,32 @@ public class MovieCatalogResources {
     @HystrixCommand(fallbackMethod = "getFallbackCatalog")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
 
-        UserRating ratings = restTemplate.getForObject("http://ratings-data-service/ratingsdata/users/" + userId,
-                UserRating.class);
+        UserRating ratings = getUserRating(userId);
 
-        return ratings.getRatings().stream().map(rating -> {
-            // restTemplate is for synchronous programming
-            // for each movie ID, call movie info service and get details
-            Movie movie = restTemplate.getForObject("http://movie-info-service/movies/" + rating.getMovieId(), Movie.class);
+        return ratings.getRatings()
+                .stream()
+                .map(this::getCatalogItem)
+                .collect(Collectors.toList());
+    }
 
-            // web client is for asynchronous programming
+    @HystrixCommand(fallbackMethod = "getFallbackUserRating")
+    private UserRating getUserRating(String userId) {
+        return restTemplate.getForObject(
+                "http://ratings-data-service/ratingsdata/users/" + userId,
+                UserRating.class
+        );
+    }
+
+    @HystrixCommand(fallbackMethod = "getFallbackCatalogItem")
+    private CatalogItem getCatalogItem(Rating rating) {
+        // restTemplate is for synchronous programming
+        // for each movie ID, call movie info service and get details
+        Movie movie = restTemplate.getForObject(
+                "http://movie-info-service/movies/" + rating.getMovieId(),
+                Movie.class
+        );
+
+        // web client is for asynchronous programming
 
             /*
 
@@ -56,13 +73,34 @@ public class MovieCatalogResources {
                     .block();
             */
 
-            // put them all together
-            return new CatalogItem(movie.getName(), movie.getDescription(), rating.getRating());
-
-        }).collect(Collectors.toList());
+        // put them all together
+        return new CatalogItem(
+                movie.getName(),
+                movie.getDescription(),
+                rating.getRating()
+        );
     }
 
     public List<CatalogItem> getFallbackCatalog(@PathVariable("userId") String userId) {
-        return Arrays.asList(new CatalogItem("No movie", "", 0));
+        return Arrays.asList(new CatalogItem(
+                "No movie",
+                "",
+                0
+        ));
     }
+
+    private UserRating getFallbackUserRating(String userId) {
+        UserRating userRating = new UserRating();
+        userRating.setUserId(userId);
+        userRating.setRatings(Arrays.asList(
+                new Rating("0", 0)
+        ));
+
+        return userRating;
+    }
+
+    private CatalogItem getFallbackCatalogItem(Rating rating) {
+        return new CatalogItem("Movie name not found", "", rating.getRating());
+    }
+
 }
