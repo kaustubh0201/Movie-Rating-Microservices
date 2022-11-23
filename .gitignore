@@ -11,3 +11,5 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 movie-info-service/src/main/resources/application-dev.properties
+
+.idea/

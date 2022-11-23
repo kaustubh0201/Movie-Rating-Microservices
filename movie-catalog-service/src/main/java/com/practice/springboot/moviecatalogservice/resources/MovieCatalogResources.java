@@ -37,7 +37,7 @@ public class MovieCatalogResources {
         UserRating ratings = restTemplate.getForObject("http://ratings-data-service/ratingsdata/users/" + userId,
                 UserRating.class);
 
-        return ratings.getUserRating().stream().map(rating -> {
+        return ratings.getRatings().stream().map(rating -> {
             // restTemplate is for synchronous programming
             // for each movie ID, call movie info service and get details
             Movie movie = restTemplate.getForObject("http://movie-info-service/movies/" + rating.getMovieId(), Movie.class);
@@ -55,7 +55,7 @@ public class MovieCatalogResources {
             */
 
             // put them all together
-            return new CatalogItem(movie.getName(), "Random Description", rating.getRating());
+            return new CatalogItem(movie.getName(), movie.getDescription(), rating.getRating());
 
         }).collect(Collectors.toList());
     }

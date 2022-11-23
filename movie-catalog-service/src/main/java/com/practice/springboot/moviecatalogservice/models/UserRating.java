@@ -4,28 +4,22 @@ import java.util.List;
 
 public class UserRating {
 
-    private List<Rating> userRating;
+    private String userId;
+    private List<Rating> ratings;
 
-    public UserRating() {
-
+    public String getUserId() {
+        return userId;
     }
 
-    public UserRating(List<Rating> userRating) {
-        this.userRating = userRating;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public List<Rating> getUserRating() {
-        return userRating;
+    public List<Rating> getRatings() {
+        return ratings;
     }
 
-    public void setUserRating(List<Rating> userRating) {
-        this.userRating = userRating;
-    }
-
-    @Override
-    public String toString() {
-        return "UserRating{" +
-                "userRating=" + userRating +
-                '}';
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
     }
 }
