@@ -58,9 +58,5 @@ public class MovieCatalogResources {
             return new CatalogItem(movie.getName(), "Random Description", rating.getRating());
 
         }).collect(Collectors.toList());
-
-
-
-
     }
 }
