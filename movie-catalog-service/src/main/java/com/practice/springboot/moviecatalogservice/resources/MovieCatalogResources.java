@@ -29,9 +29,6 @@ public class MovieCatalogResources {
     private RestTemplate restTemplate;
 
     @Autowired
-    private DiscoveryClient discoveryClient;
-
-    @Autowired
     private MovieInfo movieInfo;
 
     @Autowired
