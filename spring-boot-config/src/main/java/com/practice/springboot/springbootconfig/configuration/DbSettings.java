@@ -11,6 +11,10 @@ public class DbSettings {
     private String host;
     private int port;
 
+    public DbSettings() {
+
+    }
+
     public DbSettings(String connection, String host, int port) {
         this.connection = connection;
         this.host = host;
