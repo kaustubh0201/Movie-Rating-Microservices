@@ -1,3 +1,5 @@
+spring.application.name: spring-boot-config
+
 my:
   greetings: Hello World
   list:
@@ -19,5 +21,6 @@ management.endpoints.web.exposure.include: "*"
 #spring.cloud.config.uri: http://localhost:8888
 
 spring.config.import: configserver:http://localhost:8888
+
 
 # spring.profiles.active: test
