@@ -40,7 +40,7 @@ public class GreetingController {
 
     @GetMapping("/greeting")
     public String greeting() {
-        return dbSettings.getConnection() + dbSettings.getHost();
+        return dbSettings.getConnection() + dbSettings.getHost() + dbSettings.getPort();
     }
 
     @GetMapping("/envdetails")
